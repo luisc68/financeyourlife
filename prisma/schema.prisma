@@ -1,0 +1,37 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+//Tabla de Usuario
+model User {
+  id        Int      @default(autoincrement()) @id
+  email     String   @unique
+  name      String
+  password  String
+  register     RegistroCuentaBancaria[]
+}
+
+//Tabla de Registro de Cuentas Bancarias
+model RegistroCuentaBancaria {
+  id            Int      @id @default(autoincrement())
+  nombre        String
+  numeroCuenta  String
+  banco         String
+  tipoCuenta    String
+  saldo         Float
+  tipoMoneda    String
+  fechaCreacion DateTime? @default(now())
+  fechaActualizacion DateTime? @default(now())
+  User          User     @relation(fields: [userId], references: [id])
+  userId        Int
+}
+//Esta tabla va relaciona con la tabla de usuario, para que se muestre la infromacion propia del usuario
+
+
